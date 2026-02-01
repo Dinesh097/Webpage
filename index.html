@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Be My Valentine ❤️</title>
+
   <style>
     body {
       height: 100vh;
@@ -12,6 +13,7 @@
       justify-content: center;
       background: linear-gradient(135deg, #ff9a9e, #fad0c4);
       font-family: 'Comic Sans MS', cursive, sans-serif;
+      overflow: hidden;
     }
 
     .card {
@@ -21,6 +23,7 @@
       text-align: center;
       box-shadow: 0 20px 40px rgba(0,0,0,0.2);
       position: relative;
+      z-index: 2;
     }
 
     h1 {
@@ -57,12 +60,28 @@
       left: 50%;
       transform: translateX(20%);
     }
+
+    /* Hearts */
+    .heart {
+      position: fixed;
+      top: -20px;
+      font-size: 24px;
+      animation: fall linear forwards;
+      z-index: 1;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh);
+        opacity: 0;
+      }
+    }
   </style>
 </head>
 <body>
 
   <div class="card">
-    <h1>Will you be my Valentine Cookie? 💖</h1>
+    <h1>Will you be my Valentine, Cookie? 💖</h1>
 
     <div class="buttons">
       <button id="yes">Yes 💕</button>
@@ -70,8 +89,14 @@
     </div>
   </div>
 
+  <!-- Background Music -->
+  <audio id="music" loop>
+    <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
+  </audio>
+
   <script>
     const noButton = document.getElementById("no");
+    const music = document.getElementById("music");
 
     function moveButton() {
       const x = Math.random() * 200 - 100;
@@ -79,22 +104,46 @@
       noButton.style.transform = `translate(${x}px, ${y}px)`;
     }
 
-    // Desktop hover
     noButton.addEventListener("mouseenter", moveButton);
-
-    // Mobile touch
     noButton.addEventListener("touchstart", moveButton);
 
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.innerText = "💖";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = Math.random() * 2 + 3 + "s";
+      document.body.appendChild(heart);
+
+      setTimeout(() => heart.remove(), 5000);
+    }
+
     document.getElementById("yes").addEventListener("click", () => {
+      music.play();
+
+      setInterval(createHeart, 300);
+
       document.body.innerHTML = `
-        <h1 style="
+        <div style="
+          text-align: center;
           color: white;
           font-family: 'Comic Sans MS', cursive;
-          text-align: center;
         ">
-          YAY!! 💘🥰  
-          Best Valentine ever!
-        </h1>
+          <h1>I love you, Cookie 😏💖</h1>
+          <p>You just made me the happiest person ever 🥰</p>
+
+          <img 
+            src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif"
+            alt="Cute Cat Love"
+            style="
+              max-width: 320px;
+              width: 100%;
+              border-radius: 20px;
+              margin-top: 20px;
+              box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            "
+          />
+        </div>
       `;
     });
   </script>
